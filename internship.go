@@ -22,6 +22,10 @@ func main() {
         Aliases: []string{"i"},
         Usage:   "initalize the file",
         Action:  func(c *cli.Context) error {
+            ifexists := checkFile("internship.txt")
+            if ifexists == true {
+                fmt.Println("File Already Exists")
+            }
             filePath, _ := filepath.Abs("internship.txt")
             f, err := os.Create(filePath)
             if err != nil {
@@ -65,4 +69,12 @@ func main() {
   if err != nil {
     log.Fatal(err)
   }
+}
+
+func checkFile(path string) bool {
+    if _, err := os.Stat("internship.txt"); os.IsNotExist(err){
+       return false
+    } else {
+        return true
+    }
 }
