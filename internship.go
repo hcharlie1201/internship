@@ -47,12 +47,24 @@ func main() {
         },
       },
       {
-        Name:        "add",
+        Name:        "add [company_name]",
         Aliases:     []string{"a"},
         Usage:       "options for task templates",
         Action: func(c *cli.Context) error {
-              fmt.Println("new task template: ", c.Args().First())
-              return nil
+            //check if file exists
+            ifexists := checkFile("internship.txt")
+            if ifexists == false {
+                fmt.Println("File Already Exists")
+            }
+            arg2 := c.Args().Get(1)
+            if arg2 == "" {
+                fmt.Println("Must specify a company you want to add")
+                return nil
+            }
+            f := returnFile()
+            f.WriteString(arg2 + "\n")
+            f.Close()
+            return nil
           },
       },
       {
@@ -77,4 +89,14 @@ func checkFile(path string) bool {
     } else {
         return true
     }
+}
+
+func returnFile()*os.File {
+    filePath, _ := filepath.Abs("internship.txt")
+    f, err := os.Create(filePath)
+    if err != nil {
+        fmt.Println(err)
+        return nil
+    }
+    return f
 }
