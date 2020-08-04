@@ -2,6 +2,8 @@ package main
 
 import (
   "fmt"
+  "bufio"
+  "time"
   "log"
   "os"
   "github.com/urfave/cli/v2"
@@ -38,8 +40,8 @@ func main() {
         },
       },
       {
-        Name:    "complete",
-        Aliases: []string{"c"},
+        Name:    "approved",
+        Aliases: []string{"approved"},
         Usage:   "complete a task on the list",
         Action:  func(c *cli.Context) error {
           fmt.Println("completed task: ", c.Args().First())
@@ -47,22 +49,48 @@ func main() {
         },
       },
       {
-        Name:        "add [company_name]",
+        Name:        "add",
         Aliases:     []string{"a"},
-        Usage:       "options for task templates",
+        Usage:       "adding the internship with the date listed",
         Action: func(c *cli.Context) error {
             //check if file exists
             ifexists := checkFile("internship.txt")
             if ifexists == false {
                 fmt.Println("File Already Exists")
             }
-            arg2 := c.Args().Get(1)
+            arg2 := c.Args().First()
             if arg2 == "" {
                 fmt.Println("Must specify a company you want to add")
                 return nil
             }
             f := returnFile()
+            currentTime := time.Now()
+            arg2 = arg2 + " " + currentTime.String()
             f.WriteString(arg2 + "\n")
+            fmt.Println("Successfully added" + arg2)
+            f.Close()
+            return nil
+          },
+      },
+      {
+          Name: "list",
+          Usage: "List current internship applied, approved, and rejected",
+          Action: func(c *cli.Context) error {
+            ifexists := checkFile("internship.txt")
+            if ifexists == false {
+                fmt.Println("File Already Exists")
+                return nil
+            }
+            f := returnFile()
+            scanner := bufio.NewScanner(f)
+            if err := scanner.Err(); err != nil {
+                fmt.Println(err)
+                return nil
+            }
+            fmt.Println("Current applied internships")
+            for scanner.Scan() {
+                fmt.Println(scanner.Text())
+            }
             f.Close()
             return nil
           },
