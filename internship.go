@@ -2,6 +2,7 @@ package main
 
 import (
   "fmt"
+  "strings"
   "bufio"
   "time"
   "log"
@@ -41,11 +42,30 @@ func main() {
       },
       {
         Name:    "approved",
-        Aliases: []string{"approved"},
-        Usage:   "complete a task on the list",
+        Aliases: []string{"app"},
+        Usage:   "when an internship gets back to you, and approved you",
         Action:  func(c *cli.Context) error {
-          fmt.Println("completed task: ", c.Args().First())
-          return nil
+            nameCompany := c.Args().First()
+            e := SetData(nameCompany, "added.txt")
+            if e != nil {
+                fmt.Println(e)
+                return nil
+            }
+            return nil
+        },
+      },
+      {
+        Name:    "rejected",
+        Aliases: []string{"rej"},
+        Usage:   "when an internship gets back to you, and rejected you",
+        Action:  func(c *cli.Context) error {
+            nameCompany := c.Args().First()
+            e := SetData(nameCompany, "rejected.txt")
+            if e != nil {
+                fmt.Println(e)
+                return nil
+            }
+            return nil
         },
       },
       {
@@ -54,16 +74,12 @@ func main() {
         Usage:       "adding the internship with the date listed",
         Action: func(c *cli.Context) error {
             //check if file exists
-            ifexists := checkFile("internship.txt")
-            if ifexists == false {
-                fmt.Println("File Already Exists")
-            }
             arg2 := c.Args().First()
             if arg2 == "" {
                 fmt.Println("Must specify a company you want to add")
                 return nil
             }
-            f := returnFile()
+            f := returnFile("internship.txt")
             currentTime := time.Now()
             arg2 = arg2 + " " + currentTime.String()
             f.WriteString(arg2 + "\n")
@@ -76,12 +92,7 @@ func main() {
           Name: "list",
           Usage: "List current internship applied, approved, and rejected",
           Action: func(c *cli.Context) error {
-            ifexists := checkFile("internship.txt")
-            if ifexists == false {
-                fmt.Println("File Already Exists")
-                return nil
-            }
-            f := returnFile()
+            f := returnFile("internship.txt")
             scanner := bufio.NewScanner(f)
             if err := scanner.Err(); err != nil {
                 fmt.Println(err)
@@ -90,6 +101,14 @@ func main() {
             fmt.Println("Current applied internships")
             for scanner.Scan() {
                 fmt.Println(scanner.Text())
+            }
+            if checkFile("added.txt") == false {
+                f2 := returnFile("added.txt")
+                fmt.Println("Current approved internships")
+                scanner2 := bufio.NewScanner(f2)
+                for scanner2.Scan() {
+                    fmt.Println(scanner2.Text())
+                }
             }
             f.Close()
             return nil
@@ -112,14 +131,14 @@ func main() {
 }
 
 func checkFile(path string) bool {
-    if _, err := os.Stat("internship.txt"); os.IsNotExist(err){
+    if _, err := os.Stat(path); os.IsNotExist(err){
        return false
     } else {
         return true
     }
 }
 
-func returnFile()*os.File {
+func returnFile(path string)*os.File {
     filePath, _ := filepath.Abs("internship.txt")
     f, err := os.Create(filePath)
     if err != nil {
@@ -127,4 +146,34 @@ func returnFile()*os.File {
         return nil
     }
     return f
+}
+
+func SetData(nameCompany string, path string) error {
+    f := returnFile("internship.txt")
+    scanner := bufio.NewScanner(f)
+    if err := scanner.Err(); err != nil {
+        fmt.Println(err)
+        return err
+    }
+    f2 := returnFile("temp.txt")
+    addedFile := returnFile(path)
+    for scanner.Scan() {
+        line := scanner.Text()
+        if !strings.Contains(line, nameCompany) {
+            f2.WriteString(line)
+        } else {
+            fmt.Println("Added internship to the " + path + " filepath")
+            addedFile.WriteString(line + "\n")
+        }
+    }
+    e := os.Remove("internship.txt")
+    if e != nil {
+        fmt.Println(e)
+        return e
+    }
+    os.Rename("temp.txt", "internship.txt")
+    addedFile.Close()
+    f2.Close()
+    f.Close()
+    return nil
 }
