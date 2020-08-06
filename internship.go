@@ -98,19 +98,29 @@ func main() {
                 fmt.Println(err)
                 return nil
             }
+            f.Close()
             fmt.Println("Current applied internships")
             for scanner.Scan() {
                 fmt.Println(scanner.Text())
             }
-            if checkFile("added.txt") == false {
+            if checkFile("added.txt") == true {
                 f2 := returnFile("added.txt")
                 fmt.Println("Current approved internships")
                 scanner2 := bufio.NewScanner(f2)
                 for scanner2.Scan() {
                     fmt.Println(scanner2.Text())
                 }
+                f2.Close()
             }
-            f.Close()
+            if checkFile("rejected.txt") == true {
+                f2 := returnFile("rejected.txt")
+                fmt.Println("Current rejected internships")
+                scanner2 := bufio.NewScanner(f2)
+                for scanner2.Scan() {
+                    fmt.Println(scanner2.Text())
+                }
+                f2.Close()
+            }
             return nil
           },
       },
