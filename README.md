@@ -41,7 +41,7 @@ $ go install
 - [] want to implement a GUI
 - [] expand to become a bot for applying for internships maybe in the future? **ambitious goal**
 - [] add testing and make this open source
-- [] probably need travis to be implemented for testing
+- [] then I probably need travis to be implemented for testing
 
 
 
