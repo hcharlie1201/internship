@@ -1,5 +1,7 @@
 
-<h1>Internship Tracker</h1>
+<h1>Internship Tracker</h1> ![]images/tracker.png
+
+
 
 As a desperate student trying to find an internship but can'f find one and said:
 
