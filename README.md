@@ -1,5 +1,5 @@
 
-<h1>Internship Tracker</h1> ![]images/tracker.png
+<h1>Internship Tracker</h1> ![](images/tracker.png)
 
 
 
