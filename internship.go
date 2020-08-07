@@ -15,7 +15,7 @@ func main() {
   app := &cli.App{
     Name: "internship",
     Usage: "tracks internship",
-    UseShortOptionHandling: true
+    UseShortOptionHandling: true,
     Action: func(c *cli.Context) error {
       fmt.Println("Hello users of the cli!")
       return nil
@@ -228,7 +228,7 @@ func SetData(nameCompany string, path string) error {
         fmt.Println(e)
         return e
     }
-    os.Rename("temp.txt", "internship.txt")
+    os.Rename("temp.txt", path)
     addedFile.Close()
     f2.Close()
     f.Close()
