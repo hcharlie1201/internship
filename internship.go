@@ -92,7 +92,7 @@ func main() {
       {
           Name: "list",
           Usage: "list current internship applied, approved, and rejected",
-          Aliases:     []string{"a"},
+          Aliases:     []string{"l"},
           Action: func(c *cli.Context) error {
             f := returnFile("internship.txt")
             scanner := bufio.NewScanner(f)
@@ -100,14 +100,18 @@ func main() {
                 fmt.Println(err)
                 return nil
             }
-            f.Close()
-            fmt.Println("Current applied internships")
+            fmt.Println("Current applied internships:")
+            counter := 0
             for scanner.Scan() {
                 fmt.Println(scanner.Text())
+                counter += 1
+            }
+            if counter == 0 {
+                fmt.Println("None")
             }
             if checkFile("added.txt") == true {
                 f2 := returnFile("added.txt")
-                fmt.Println("Current approved internships")
+                fmt.Println("Current approved internships:")
                 scanner2 := bufio.NewScanner(f2)
                 for scanner2.Scan() {
                     fmt.Println(scanner2.Text())
@@ -116,13 +120,14 @@ func main() {
             }
             if checkFile("rejected.txt") == true {
                 f2 := returnFile("rejected.txt")
-                fmt.Println("Current rejected internships")
+                fmt.Println("Current rejected internships:")
                 scanner2 := bufio.NewScanner(f2)
                 for scanner2.Scan() {
                     fmt.Println(scanner2.Text())
                 }
                 f2.Close()
             }
+            f.Close()
             return nil
           },
       },
