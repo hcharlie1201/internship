@@ -21,7 +21,7 @@ Run go install everytime in case of updates!
 ```
 $ go install
 ```
-*Commands
+**Commands**
   * _init_ to init the a text file to store all the internships. **l** for the shortcut
   * _help_ if you want to see the information about the cli 
   * _add_ and then specify what company you want to add. **a** for shortcut
@@ -33,6 +33,9 @@ $ go install
     * _comapny_ not yet implemented
     * _file_ not yet implemented
     
+    
+### Tasks
+
 - [] need to add a "are you sure you want to remove xxx"  
 - [x] need my beta testers
 - [] want to implement a GUI
