@@ -91,7 +91,8 @@ func main() {
       },
       {
           Name: "list",
-          Usage: "List current internship applied, approved, and rejected",
+          Usage: "list current internship applied, approved, and rejected",
+          Aliases:     []string{"a"},
           Action: func(c *cli.Context) error {
             f := returnFile("internship.txt")
             scanner := bufio.NewScanner(f)
@@ -132,26 +133,26 @@ func main() {
 				{
 					Name:  "all",
 					Usage: "Delete all files",
-					Action: func(c *cli.Context) error {
                     Aliases: []string{"a"},
+					Action: func(c *cli.Context) error {
                         if checkFile("internship.txt") == true {
                             e := os.Remove("internship.txt")
                             if e != nil {
-                                log.Fatal(err)
+                                log.Fatal(e)
                                 return nil
                             }
                         }
                         if checkFile("added.txt") == true {
                             e := os.Remove("added.txt")
                             if e != nil {
-                                log.Fatal(err)
+                                log.Fatal(e)
                                 return nil
                             }
                         }
                         if checkFile("rejected.txt") == true {
                             e := os.Remove("rejected.txt")
                             if e != nil {
-                                log.Fatal(err)
+                                log.Fatal(e)
                                 return nil
                             }
                         }
