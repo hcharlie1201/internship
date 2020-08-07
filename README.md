@@ -34,6 +34,8 @@ $ go install
     * _file_ not yet implemented
     
     
+    
+    
 ### Tasks
 
 - [] need to add a "are you sure you want to remove xxx"  
@@ -44,6 +46,8 @@ $ go install
 - [] probably need travis to be implemented for testing
 
 
+
+<hr>
 <h2>Delete<h2>
 To delete everything, go to your $GOPATH/bin and delete the installed internship
 Then delete the whole folder =)
