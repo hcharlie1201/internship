@@ -1,6 +1,6 @@
 
-<h1>Internship Tracker</h1> 
-<img src="images/tracker.png">
+<h1>Internship Tracker <img src="images/tracker.png"></h1> 
+
 
 
 
