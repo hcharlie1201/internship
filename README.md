@@ -34,9 +34,7 @@ $ go install
     * _file_ not yet implemented
     
     
-    
-    
-### Tasks
+## Tasks
 
 - [] need to add a "are you sure you want to remove xxx"  
 - [x] need my beta testers
@@ -48,6 +46,6 @@ $ go install
 
 
 <hr>
-<h2>Delete<h2>
+## Delete
 To delete everything, go to your $GOPATH/bin and delete the installed internship
 Then delete the whole folder =)
