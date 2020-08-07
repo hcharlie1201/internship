@@ -126,11 +126,33 @@ func main() {
       },
       {
          Name:  "remove",
-         Usage: "remove an existing template",
-         Action: func(c *cli.Context) error {
-              fmt.Println("removed task template: ", c.Args().First())
-              return nil
-          },
+         Usage: "remove ",
+         Subcommands: []*cli.Command{
+				{
+					Name:  "all",
+					Usage: "Delete all files",
+					Action: func(c *cli.Context) error {
+						fmt.Println("new task template: ", c.Args().First())
+						return nil
+					},
+				},
+				{
+					Name:  "company",
+					Usage: "remove an existing template",
+					Action: func(c *cli.Context) error {
+						fmt.Println("removed task template: ", c.Args().First())
+						return nil
+					},
+				},
+				{
+					Name:  "file",
+					Usage: "remove an existing template",
+					Action: func(c *cli.Context) error {
+						fmt.Println("removed task template: ", c.Args().First())
+						return nil
+					},
+				},
+			},
       },
     },
   }
