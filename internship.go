@@ -15,6 +15,7 @@ func main() {
   app := &cli.App{
     Name: "internship",
     Usage: "tracks internship",
+    UseShortOptionHandling: true
     Action: func(c *cli.Context) error {
       fmt.Println("Hello users of the cli!")
       return nil
@@ -126,19 +127,42 @@ func main() {
       },
       {
          Name:  "remove",
-         Usage: "remove ",
+         Usage: "remove a specified subcommand ",
          Subcommands: []*cli.Command{
 				{
 					Name:  "all",
 					Usage: "Delete all files",
 					Action: func(c *cli.Context) error {
-						fmt.Println("new task template: ", c.Args().First())
+                    Aliases: []string{"a"},
+                        if checkFile("internship.txt") == true {
+                            e := os.Remove("internship.txt")
+                            if e != nil {
+                                log.Fatal(err)
+                                return nil
+                            }
+                        }
+                        if checkFile("added.txt") == true {
+                            e := os.Remove("added.txt")
+                            if e != nil {
+                                log.Fatal(err)
+                                return nil
+                            }
+                        }
+                        if checkFile("rejected.txt") == true {
+                            e := os.Remove("rejected.txt")
+                            if e != nil {
+                                log.Fatal(err)
+                                return nil
+                            }
+                        }
+                        fmt.Println("Successfully deleted everything")
 						return nil
 					},
 				},
 				{
 					Name:  "company",
-					Usage: "remove an existing template",
+					Usage: "delete a speficied company",
+                    Aliases: []string{"c"},
 					Action: func(c *cli.Context) error {
 						fmt.Println("removed task template: ", c.Args().First())
 						return nil
@@ -146,7 +170,8 @@ func main() {
 				},
 				{
 					Name:  "file",
-					Usage: "remove an existing template",
+					Usage: "delete a file",
+                    Aliases: []string{"p"},
 					Action: func(c *cli.Context) error {
 						fmt.Println("removed task template: ", c.Args().First())
 						return nil
@@ -171,7 +196,7 @@ func checkFile(path string) bool {
 }
 
 func returnFile(path string)*os.File {
-    filePath, _ := filepath.Abs("internship.txt")
+    filePath, _ := filepath.Abs(path)
     f, err := os.Create(filePath)
     if err != nil {
         fmt.Println(err)
@@ -181,7 +206,7 @@ func returnFile(path string)*os.File {
 }
 
 func SetData(nameCompany string, path string) error {
-    f := returnFile("internship.txt")
+    f := returnFile(path)
     scanner := bufio.NewScanner(f)
     if err := scanner.Err(); err != nil {
         fmt.Println(err)
@@ -198,7 +223,7 @@ func SetData(nameCompany string, path string) error {
             addedFile.WriteString(line + "\n")
         }
     }
-    e := os.Remove("internship.txt")
+    e := os.Remove(path)
     if e != nil {
         fmt.Println(e)
         return e
