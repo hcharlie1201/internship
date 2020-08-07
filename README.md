@@ -45,7 +45,6 @@ $ go install
 
 
 
-<hr>
 ## Delete
 To delete everything, go to your $GOPATH/bin and delete the installed internship
 Then delete the whole folder =)
