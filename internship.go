@@ -134,43 +134,43 @@ func main() {
       {
          Name:  "remove",
          Usage: "remove a specified subcommand ",
+         Aliases: []string{"rm"},
          Subcommands: []*cli.Command{
 				{
 					Name:  "all",
 					Usage: "Delete all files",
                     Aliases: []string{"a"},
 					Action: func(c *cli.Context) error {
-                        if checkFile("internship.txt") == true {
-                            e := os.Remove("internship.txt")
+                        a := []string{"internship.txt", "added.txt", "rejected.txt"}
+                        for _, val := range a {
+                        if checkFile(val) == true {
+                            e := os.Remove(val)
                             if e != nil {
                                 log.Fatal(e)
                                 return nil
                             }
                         }
-                        if checkFile("added.txt") == true {
-                            e := os.Remove("added.txt")
-                            if e != nil {
-                                log.Fatal(e)
-                                return nil
-                            }
-                        }
-                        if checkFile("rejected.txt") == true {
-                            e := os.Remove("rejected.txt")
-                            if e != nil {
-                                log.Fatal(e)
-                                return nil
-                            }
-                        }
-                        fmt.Println("Successfully deleted everything")
+                    }
+                    fmt.Println("Successfully deleted everything if it exists")
 						return nil
 					},
 				},
 				{
 					Name:  "company",
-					Usage: "delete a speficied company",
+					Usage: "delete a speficied company that you added",
                     Aliases: []string{"c"},
 					Action: func(c *cli.Context) error {
-						fmt.Println("removed task template: ", c.Args().First())
+                        comp :=  c.Args().First()
+                        if comp == "" {
+                            fmt.Println("Need to specify a company you want to delete.")
+                            return nil
+                        }
+                        e := DeleteData(comp, "internship.txt")
+                        if e != nil {
+                            fmt.Println(e)
+                            return nil
+                        }
+                        fmt.Println("Deleted "+ comp + "sucessfully if it exists.")
 						return nil
 					},
 				},
@@ -179,7 +179,13 @@ func main() {
 					Usage: "delete a file",
                     Aliases: []string{"p"},
 					Action: func(c *cli.Context) error {
-						fmt.Println("removed task template: ", c.Args().First())
+                        fname := c.Args().First()
+                        if fname == "" {
+                            fmt.Println("Need to specify a company you want to delete.")
+                            return nil
+                        }
+                        os.Remove(fname)
+                        fmt.Println("File deleted if it exists.")
 						return nil
 					},
 				},
@@ -227,6 +233,35 @@ func SetData(nameCompany string, path string) error {
         } else {
             fmt.Println("Added internship to the " + path + " filepath")
             addedFile.WriteString(line + "\n")
+        }
+    }
+    e := os.Remove(path)
+    if e != nil {
+        fmt.Println(e)
+        return e
+    }
+    os.Rename("temp.txt", path)
+    addedFile.Close()
+    f2.Close()
+    f.Close()
+    return nil
+}
+
+func DeleteData(nameCompany string, path string) error {
+    f := returnFile(path)
+    scanner := bufio.NewScanner(f)
+    if err := scanner.Err(); err != nil {
+        fmt.Println(err)
+        return err
+    }
+    f2 := returnFile("temp.txt")
+    addedFile := returnFile(path)
+    for scanner.Scan() {
+        line := scanner.Text()
+        if !strings.Contains(line, nameCompany) {
+            addedFile.WriteString(line + "\n")
+        } else {
+            fmt.Println("Removed " + nameCompany + "successfully")
         }
     }
     e := os.Remove(path)
