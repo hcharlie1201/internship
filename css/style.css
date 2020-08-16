@@ -42,10 +42,10 @@ a {
     background: springgreen;
 }
 
-text-primary {
+.text-primary {
     color: royalblue;
 }
 
-text-secondary {
+.text-secondary {
     color: greenyellow;
 }

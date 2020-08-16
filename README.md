@@ -1,5 +1,5 @@
 
-<h1>Internship Tracker <img src="images/tracker.png"></h1> 
+<h1>Internship Tracker <img src="images/tracker.png"></h1>
 
 
 
@@ -26,20 +26,20 @@ $ go install
 ```
 ## **Commands**
   * _init_ - to init the a text file to store all the internships. **l** for the shortcut
-  * _help_ - if you want to see the information about the cli 
+  * _help_ - if you want to see the information about the cli
   * _add_ - and then specify what company you want to add. **a** for shortcut
   * _approved_ - keep track of all approved internships. **app** for short
   * _rejected_ - keep track of rejected internships. **rej** for short
   * _list_ - lists all the internships applied, approved, and rejected :unamused:. **l** for short
   * _remove_ (requries subcommands)
     * _all_ - removes all the files
-    * _comapny_ - not yet implemented
-    * _file_ not yet implemented
-    
-    
+    * _company_ - specify the company you want to remove
+    * _file_ - specify the file you want to delete
+
+
 ## Tasks
 
-- [] need to add a "are you sure you want to remove xxx"  
+- [] need to add a "are you sure you want to remove xxx"
 - [x] need my beta testers
 - [] want to implement a GUI
 - [] expand to become a bot for applying for internships maybe in the future? **ambitious goal**
