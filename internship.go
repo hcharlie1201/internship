@@ -189,6 +189,9 @@ func main() {
 								fmt.Println("Need to specify a company you want to delete.")
 								return nil
 							}
+							if !checkFile("internship.txt") {
+								fmt.Println("Need to add an internship.txt file first!")
+							}
 							e := deleteData(comp, "internship.txt")
 							if e != nil {
 								fmt.Println(e)
@@ -275,30 +278,25 @@ func setData(nameCompany string, path string) error {
 }
 
 func deleteData(nameCompany string, path string) error {
-	f := returnFile(path)
+	f, _ := os.Open("internship.txt")
 	scanner := bufio.NewScanner(f)
-	if err := scanner.Err(); err != nil {
-		fmt.Println(err)
-		return err
-	}
-	f2 := returnFile("temp.txt")
-	addedFile := returnFile(path)
+	os.Create("temp.txt")
+	f2, _ := os.OpenFile("temp.txt", os.O_RDWR|os.O_APPEND, 0660)
 	for scanner.Scan() {
 		line := scanner.Text()
 		if !strings.Contains(line, nameCompany) {
-			addedFile.WriteString(line + "\n")
+			f2.WriteString(line + "\n")
 		} else {
 			fmt.Println("Removed " + nameCompany + "successfully")
 		}
 	}
-	e := os.Remove(path)
+	f.Close()
+	e := os.Remove("internship.txt")
 	if e != nil {
 		fmt.Println(e)
 		return e
 	}
-	os.Rename("temp.txt", path)
-	addedFile.Close()
+	os.Rename("temp.txt", "internship.txt")
 	f2.Close()
-	f.Close()
 	return nil
 }
