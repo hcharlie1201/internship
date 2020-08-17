@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
 	"github.com/urfave/cli/v2"
 )
 
@@ -28,8 +29,8 @@ func main() {
 				Action: func(c *cli.Context) error {
 					ifexists := checkFile("internship.txt")
 					if ifexists == true {
-						fmt.Println("File Already Exists")
-                        return nil
+						fmt.Println("File Already Exists, use the delete function if you want to start a new file")
+						return nil
 					}
 					filePath, _ := filepath.Abs("internship.txt")
 					f, err := os.Create(filePath)
@@ -48,6 +49,12 @@ func main() {
 				Usage:   "when an internship gets back to you, and approved you",
 				Action: func(c *cli.Context) error {
 					nameCompany := c.Args().First()
+					if !checkFile("added.txt") {
+						os.Create("added.txt")
+					}
+					if !checkFile("internship.txt") {
+						fmt.Println("Don't have the internship.txt file yet!")
+					}
 					e := setData(nameCompany, "added.txt")
 					if e != nil {
 						fmt.Println(e)
@@ -77,36 +84,51 @@ func main() {
 				Action: func(c *cli.Context) error {
 					//check if file exists
 					arg2 := c.Args().First()
+					currentTime := time.Now()
 					if arg2 == "" {
 						fmt.Println("Must specify a company you want to add")
 						return nil
 					}
+					if checkFile("internship.txt") {
+						f, _ := os.OpenFile("internship.txt", os.O_RDWR|os.O_APPEND, 0660)
+						defer f.Close()
+						arg2 = arg2 + " " + currentTime.String() + "\n"
+						if _, errorz := f.WriteString(arg2); errorz != nil {
+							panic(errorz)
+						}
+						fmt.Println("Successfully added " + arg2 + "\n")
+						f.Close()
+						return nil
+					}
 					f := returnFile("internship.txt")
-					currentTime := time.Now()
 					arg2 = arg2 + " " + currentTime.String()
 					f.WriteString(arg2 + "\n")
-					fmt.Println("Successfully added " + arg2)
+					fmt.Println("Successfully added " + arg2 + "!")
 					f.Close()
 					return nil
 				},
 			},
-            {
-                Name:    "gui",
-                Usage:   "opens up a gui to view your files added",
-                Aliases: []string{"g"},
-                Action: func(c *cli.Context) error {
-                    GUI()
-                    fmt.Println("GUI opened up")
-                    return nil
-                },
-            },
+			{
+				Name:    "gui",
+				Usage:   "opens up a gui to view your files added",
+				Aliases: []string{"g"},
+				Action: func(c *cli.Context) error {
+					GUI()
+					fmt.Println("GUI opened up")
+					return nil
+				},
+			},
 			{
 				Name:    "list",
 				Usage:   "list current internship applied, approved, and rejected",
 				Aliases: []string{"l"},
 				Action: func(c *cli.Context) error {
-					f, _ := os.Open("./internship.txt")
+					f, _ := os.Open("internship.txt")
 					scanner := bufio.NewScanner(f)
+					if err := scanner.Err(); err != nil {
+						fmt.Println(err)
+						return nil
+					}
 					fmt.Println("Current applied internships:")
 					for scanner.Scan() {
 						fmt.Println(scanner.Text())
@@ -121,7 +143,7 @@ func main() {
 						f2.Close()
 					}
 					if checkFile("rejected.txt") == true {
-						f2, _:= os.Open("rejected.txt")
+						f2, _ := os.Open("rejected.txt")
 						fmt.Println("Current rejected internships:")
 						scanner2 := bufio.NewScanner(f2)
 						for scanner2.Scan() {
@@ -210,29 +232,37 @@ func checkFile(path string) bool {
 }
 
 func returnFile(path string) *os.File {
-    if checkFile(path) {
-        f, _ := os.Open(path)
-        return f
-    } else {
-        f, _ := os.Create(path)
-        return f
-    }
+	filePath, _ := filepath.Abs(path)
+	f, err := os.Create(filePath)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	return f
 }
 
 func setData(nameCompany string, path string) error {
-	f := returnFile(path)
+	f, _ := os.Open("internship.txt")
 	scanner := bufio.NewScanner(f)
-	f2 := returnFile("temp.txt")
-	addedFile := returnFile(path)
+	os.Create("temp.txt")
+	f2, _ := os.OpenFile("temp.txt", os.O_RDWR|os.O_APPEND, 0660)
+	addedFile, _ := os.OpenFile(path, os.O_RDWR|os.O_APPEND, 0660)
+	defer f.Close()
+	defer f2.Close()
 	for scanner.Scan() {
 		line := scanner.Text()
-        fmt.Println(line)
-        if strings.Contains(line, nameCompany) {
-			f2.WriteString(line)
-            fmt.Println("Added internship to the " + path + " filepath")
-            addedFile.WriteString(line + "\n")
+		if !strings.Contains(line, nameCompany) {
+			if _, errorz := f2.WriteString(line + "\n"); errorz != nil {
+				panic(errorz)
+			}
+		} else {
+			fmt.Println("Added internship to the " + path + " filepath")
+			if _, errorz := addedFile.WriteString(line + "\n"); errorz != nil {
+				panic(errorz)
+			}
 		}
 	}
+	f.Close()
 	e := os.Remove("internship.txt")
 	if e != nil {
 		fmt.Println(e)
@@ -241,7 +271,6 @@ func setData(nameCompany string, path string) error {
 	os.Rename("temp.txt", "internship.txt")
 	addedFile.Close()
 	f2.Close()
-	f.Close()
 	return nil
 }
 
