@@ -48,7 +48,6 @@ func main() {
 				Usage:   "when an internship gets back to you, and approved you",
 				Action: func(c *cli.Context) error {
 					nameCompany := c.Args().First()
-                    fmt.Println(nameCompany)
 					e := setData(nameCompany, "added.txt")
 					if e != nil {
 						fmt.Println(e)
@@ -211,39 +210,35 @@ func checkFile(path string) bool {
 }
 
 func returnFile(path string) *os.File {
-	filePath, _ := filepath.Abs(path)
-	f, err := os.Create(filePath)
-	if err != nil {
-		fmt.Println(err)
-		return nil
-	}
-	return f
+    if checkFile(path) {
+        f, _ := os.Open(path)
+        return f
+    } else {
+        f, _ := os.Create(path)
+        return f
+    }
 }
 
 func setData(nameCompany string, path string) error {
-	f, _ := os.Open(path)
+	f := returnFile(path)
 	scanner := bufio.NewScanner(f)
-	if err := scanner.Err(); err != nil {
-		fmt.Println(err)
-		return err
-	}
 	f2 := returnFile("temp.txt")
 	addedFile := returnFile(path)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if !strings.Contains(line, nameCompany) {
+        fmt.Println(line)
+        if strings.Contains(line, nameCompany) {
 			f2.WriteString(line)
-		} else {
-			fmt.Println("Added internship to the " + path + " filepath")
-			addedFile.WriteString(line + "\n")
+            fmt.Println("Added internship to the " + path + " filepath")
+            addedFile.WriteString(line + "\n")
 		}
 	}
-	e := os.Remove(path)
+	e := os.Remove("internship.txt")
 	if e != nil {
 		fmt.Println(e)
 		return e
 	}
-	os.Rename("temp.txt", path)
+	os.Rename("temp.txt", "internship.txt")
 	addedFile.Close()
 	f2.Close()
 	f.Close()
