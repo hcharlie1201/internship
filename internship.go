@@ -29,6 +29,7 @@ func main() {
 					ifexists := checkFile("internship.txt")
 					if ifexists == true {
 						fmt.Println("File Already Exists")
+                        return nil
 					}
 					filePath, _ := filepath.Abs("internship.txt")
 					f, err := os.Create(filePath)
@@ -47,6 +48,7 @@ func main() {
 				Usage:   "when an internship gets back to you, and approved you",
 				Action: func(c *cli.Context) error {
 					nameCompany := c.Args().First()
+                    fmt.Println(nameCompany)
 					e := setData(nameCompany, "added.txt")
 					if e != nil {
 						fmt.Println(e)
@@ -104,23 +106,14 @@ func main() {
 				Usage:   "list current internship applied, approved, and rejected",
 				Aliases: []string{"l"},
 				Action: func(c *cli.Context) error {
-					f := returnFile("internship.txt")
+					f, _ := os.Open("./internship.txt")
 					scanner := bufio.NewScanner(f)
-					if err := scanner.Err(); err != nil {
-						fmt.Println(err)
-						return nil
-					}
 					fmt.Println("Current applied internships:")
-					counter := 0
 					for scanner.Scan() {
 						fmt.Println(scanner.Text())
-						counter += 1
-					}
-					if counter == 0 {
-						fmt.Println("None")
 					}
 					if checkFile("added.txt") == true {
-						f2 := returnFile("added.txt")
+						f2, _ := os.Open("added.txt")
 						fmt.Println("Current approved internships:")
 						scanner2 := bufio.NewScanner(f2)
 						for scanner2.Scan() {
@@ -129,7 +122,7 @@ func main() {
 						f2.Close()
 					}
 					if checkFile("rejected.txt") == true {
-						f2 := returnFile("rejected.txt")
+						f2, _:= os.Open("rejected.txt")
 						fmt.Println("Current rejected internships:")
 						scanner2 := bufio.NewScanner(f2)
 						for scanner2.Scan() {
@@ -228,7 +221,7 @@ func returnFile(path string) *os.File {
 }
 
 func setData(nameCompany string, path string) error {
-	f := returnFile(path)
+	f, _ := os.Open(path)
 	scanner := bufio.NewScanner(f)
 	if err := scanner.Err(); err != nil {
 		fmt.Println(err)

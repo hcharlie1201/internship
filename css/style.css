@@ -24,11 +24,6 @@ p {
     outline: 5px dotted green;
 }
 
-
-a {
-    text-decoration: none;
-}
-
 .button {
     display: inline-block;
     font-size: 18px;
