@@ -24,7 +24,9 @@ Run go install everytime in case of updates!
 ```
 $ go install
 ```
-## **Commands**
+## **Commands** 
+First type internship and then proceed with the given commands:
+
   * _init_ - to init the a text file to store all the internships. **l** for the shortcut
   * _help_ - if you want to see the information about the cli
   * _add_ - and then specify what company you want to add. **a** for shortcut
