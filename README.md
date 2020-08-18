@@ -32,6 +32,7 @@ If you are running into pkg errors try running:
 $ sudo apt-get install build-essential libgtk-3-dev
 ``` 
  And make sure you have sciter downloaded
+ https://github.com/sciter-sdk/go-sciter
 
 Run go install everytime in case of updates!
 ```
