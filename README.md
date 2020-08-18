@@ -19,7 +19,11 @@ Go Modules are required when using this package. [See the go blog guide on using
 
 ```
 $ GO111MODULE=on go get github.com/urfave/cli/v2
+```
+```
 $ go get -x github.com/sciter-sdk/go-sciter
+```
+```
 $	go get -x github.com/sciter-sdk/go-sciter/window
 ```
 Run go install everytime in case of updates!
