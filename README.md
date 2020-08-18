@@ -24,7 +24,7 @@ $ GO111MODULE=on go get github.com/urfave/cli/v2
 $ go get -x github.com/sciter-sdk/go-sciter
 ```
 ```
-$	go get -x github.com/sciter-sdk/go-sciter/window
+$ go get -x github.com/sciter-sdk/go-sciter/window
 ```
 Run go install everytime in case of updates!
 ```
@@ -49,7 +49,7 @@ First type internship and then proceed with the given commands:
 
 - [] need to add a "are you sure you want to remove xxx"
 - [x] need my beta testers
-- [] want to implement a GUI
+- [x] want to implement a GUI
 - [] expand to become a bot for applying for internships maybe in the future? **ambitious goal**
 - [] add testing and make this open source
 - [] then I probably need travis to be implemented for testing
