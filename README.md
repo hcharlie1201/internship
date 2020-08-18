@@ -26,6 +26,12 @@ $ go get -x github.com/sciter-sdk/go-sciter
 ```
 $ go get -x github.com/sciter-sdk/go-sciter/window
 ```
+
+If you are running into pkg errors try running
+```
+$ sudo apt-get install build-essential libgtk-3-dev
+```
+
 Run go install everytime in case of updates!
 ```
 $ go install
