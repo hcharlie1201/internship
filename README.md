@@ -20,11 +20,27 @@ Go Modules are required when using this package. [See the go blog guide on using
 ```
 $ GO111MODULE=on go get github.com/urfave/cli/v2
 ```
+```
+$ go get -x github.com/sciter-sdk/go-sciter
+```
+```
+$ go get -x github.com/sciter-sdk/go-sciter/window
+```
+
+If you are running into pkg errors try running:
+```
+$ sudo apt-get install build-essential libgtk-3-dev
+``` 
+ And make sure you have sciter downloaded
+ https://github.com/sciter-sdk/go-sciter
+
 Run go install everytime in case of updates!
 ```
 $ go install
 ```
-## **Commands**
+## **Commands** 
+First type internship and then proceed with the given commands:
+
   * _init_ - to init the a text file to store all the internships. **l** for the shortcut
   * _help_ - if you want to see the information about the cli
   * _add_ - and then specify what company you want to add. **a** for shortcut
@@ -41,7 +57,7 @@ $ go install
 
 - [] need to add a "are you sure you want to remove xxx"
 - [x] need my beta testers
-- [] want to implement a GUI
+- [x] want to implement a GUI
 - [] expand to become a bot for applying for internships maybe in the future? **ambitious goal**
 - [] add testing and make this open source
 - [] then I probably need travis to be implemented for testing
